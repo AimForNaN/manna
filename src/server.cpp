@@ -3,7 +3,7 @@
 
 #include <QDebug>
 
-Manna::Api * Manna::Server::Api  = new Manna::Api("/manna/v1");
+Manna::Api * Manna::Server::Api  = new Manna::Api("/v1");
 const char * Manna::Server::Port = "7777";
 
 mg_connection * Manna::Server::conn = NULL;
