@@ -35,18 +35,17 @@ unix {
         /usr/include/sword \
         "$$PWD/libs/manna-server/src"
 
+    QMAKE_LIBDIR += /usr/local/lib
+
     LIBS += \
-        -L/usr/local/lib \
         -lsword \
         -lmanna-server
 
     CONFIG(debug, debug|release) {
-        LIBS += \
-            -L"$$PWD/libs/manna-server/build/Debug"
+        QMAKE_LIBDIR += "$$PWD/libs/manna-server/build/Debug"
     }
     else {
-        LIBS += \
-            -L"$$PWD/libs/manna-server/build/Release"
+        QMAKE_LIBDIR += "$$PWD/libs/manna-server/build/Release"
     }
 }
 
