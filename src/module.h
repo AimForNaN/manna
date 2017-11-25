@@ -7,19 +7,19 @@ namespace sword {
 	class SWModule;
 }
 
-namespace Manna {
-	class Module : public QObject
+namespace manna {
+	class module : public QObject
 	{
 		Q_OBJECT
 
-		friend class ModuleBible;
+		friend class bible;
 
 		public:
-			explicit Module(sword::SWModule *, QObject * = 0);
-			Module(const Module &);
-			Module& operator =(const Module &);
+			explicit module(sword::SWModule *, QObject * = 0);
+			module(const module &);
+			module& operator =(const module &);
 
-			static Module fromType(sword::SWModule *);
+			static module fromType(sword::SWModule *);
 			QString getName();
 			QString getType();
 			bool isNull();
@@ -30,7 +30,7 @@ namespace Manna {
 
 		private:
 			QString key;
-			sword::SWModule * module;
+			sword::SWModule * swmod;
 	};
 }
 

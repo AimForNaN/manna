@@ -2,35 +2,27 @@
 #define MANNA_API_H
 
 #include <QObject>
+#include <manna-api.h>
 
-#include "mongoose.h"
+namespace manna {
+	class library;
 
-namespace Manna {
-	struct Library;
-
-	class Api : public QObject
+	class api : public QObject, public api_interface
 	{
 		Q_OBJECT
 
 		public:
-			Api(QString, QObject * = 0);
+			api(QString = "/v1", QObject * = 0);
+
+			virtual handler getHandler(std::string,std::string);
 
 		public slots:
-			void handleGetRequest(mg_connection *, http_message *);
-			void handlePostRequest(mg_connection *, http_message *);
-			void handlePutRequest(mg_connection *, http_message *);
 
 		protected:
-			QJsonDocument handleModulesGetApi(mg_connection *, http_message *);
 
 		private:
-			Library * lib;
+			library * lib;
 			QString url;
-
-		signals:
-			void httpGetRequest(mg_connection *, http_message *);
-			void httpPostRequest(mg_connection *, http_message *);
-			void httpPutRequest(mg_connection *, http_message *);
 	};
 }
 

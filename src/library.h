@@ -8,24 +8,24 @@ namespace sword {
 	class SWModule;
 }
 
-namespace Manna {
-	class Module;
+namespace manna {
+	class module;
 
-	class Library : public QObject
+	class library : public QObject
 	{
 		Q_OBJECT
 
 		public:
-			Library(const QString &lib = "", QObject * = 0);
+			library(const QString &lib = "", QObject * = 0);
 
-			Module getModule(const QString &);
-			QList<Module> getModules();
+			module getModule(const QString &);
+			QList<module> getModules();
 
 		public slots:
 			void loadModules();
 
 		private:
-			sword::SWMgr *lib;
+			sword::SWMgr * lib;
 	};
 }
 

@@ -8,72 +8,72 @@
 #include <swmgr.h>
 #include <swmodule.h>
 
-Manna::Module::Module(sword::SWModule *mod, QObject *parent)
-	: QObject(parent),
-	  module(mod)
+manna::module::module(sword::SWModule *mod, QObject *parent)
+	: QObject(parent)
+	, swmod(mod)
 {
 }
 
-Manna::Module::Module(const Module &mod) : QObject() {
+manna::module::module(const module &mod) : QObject() {
 	this->setParent(mod.parent());
-	module = mod.module;
+	swmod = mod.swmod;
 	key = mod.key;
 }
 
-Manna::Module& Manna::Module::operator =(const Module &mod) {
-	module = mod.module;
+manna::module& manna::module::operator =(const module &mod) {
+	swmod = mod.swmod;
 	key = mod.key;
 	return *this;
 }
 
-Manna::Module Manna::Module::fromType(sword::SWModule *mod) {
+manna::module manna::module::fromType(sword::SWModule *mod) {
 	if (mod->getType() == sword::SWMgr::MODTYPE_BIBLES) {
-		return ModuleBible(mod);
+		return bible(mod);
 	}
-	return Module(mod);
+	return module(mod);
 }
 
-QString Manna::Module::getName() {
-	return module->getName();
+QString manna::module::getName() {
+	return swmod->getName();
 }
 
-QString Manna::Module::getType() {
-	return module->getType();
+QString manna::module::getType() {
+	return swmod->getType();
 }
 
-bool Manna::Module::isNull() {
-	return !module;
+bool manna::module::isNull() {
+	return !swmod;
 }
 
-bool Manna::Module::isRightToLeft() {
-	return module->getConfig().has("Direction", "RtoL");
+bool manna::module::isRightToLeft() {
+	return swmod->getConfig().has("Direction", "RtoL");
 }
 
-QJsonArray Manna::Module::renderText() {
-	if (!strcmp(module->getType(), sword::SWMgr::MODTYPE_BIBLES)) {
-		ModuleBible mod = *this;
+QJsonArray manna::module::renderText() {
+	if (!strcmp(swmod->getType(), sword::SWMgr::MODTYPE_BIBLES)) {
+		bible mod = *this;
 		return mod.renderText();
 	}
 	return QJsonArray();
 }
 
-void Manna::Module::setKey(const QString &key) {
+void manna::module::setKey(const QString &key) {
 	this->key = key;
 }
 
-QJsonObject Manna::Module::toJson() {
+QJsonObject manna::module::toJson() {
 	QJsonObject mod;
 	mod["class"]       = "module";
-	mod["About"]       = module->getConfigEntry("About");
-	mod["Description"] = module->getConfigEntry("Description");
-	mod["Encoding"]    = module->getConfigEntry("Encoding");
-	mod["Feature"]     = module->getConfigEntry("Feature");
+	mod["About"]       = swmod->getConfigEntry("About");
+	mod["Description"] = swmod->getConfigEntry("Description");
+	mod["Encoding"]    = swmod->getConfigEntry("Encoding");
+	mod["Feature"]     = swmod->getConfigEntry("Feature");
 	mod["Key"]         = key;
-	mod["Language"]    = module->getConfigEntry("Lang");
-	mod["Name"]        = module->getName();
+	mod["Language"]    = swmod->getConfigEntry("Lang");
+	mod["Name"]        = swmod->getName();
 	mod["R2L"]         = isRightToLeft();
 	mod["Text"]        = renderText();
-	mod["Version"]     = module->getConfigEntry("Version");
-	mod["Type"]        = module->getType();
+	mod["Version"]     = swmod->getConfigEntry("Version");
+	mod["Type"]        = swmod->getType();
 	return mod;
 }

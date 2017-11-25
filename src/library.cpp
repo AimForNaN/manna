@@ -8,29 +8,29 @@
 #include <swmgr.h>
 #include <swmodule.h>
 
-Manna::Library::Library(const QString &lib, QObject *parent)
+manna::library::library(const QString &lib, QObject *parent)
 	: QObject(parent),
 	  lib(new sword::SWMgr(lib.toUtf8().constData()))
 {
 	loadModules();
 }
 
-Manna::Module Manna::Library::getModule(const QString &mod) {
+manna::module manna::library::getModule(const QString &mod) {
 	sword::SWModule * m = lib->getModule(mod.toUtf8().constData());
-	return Module(m);
+	return module(m);
 }
 
-QList<Manna::Module> Manna::Library::getModules() {
-	QList<Module> arr;
+QList<manna::module> manna::library::getModules() {
+	QList<module> arr;
 	sword::ModMap::iterator it;
 	for (it = lib->Modules.begin(); it != lib->Modules.end(); ++it) {
 		sword::SWModule * mod = (*it).second;
-		Module mm = Module::fromType(mod);
+		module mm = module::fromType(mod);
 		arr.append(mm);
 	}
 	return arr;
 }
 
-void Manna::Library::loadModules() {
+void manna::library::loadModules() {
 	lib->Load();
 }

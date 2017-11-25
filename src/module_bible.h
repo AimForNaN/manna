@@ -8,16 +8,16 @@ namespace sword {
 	class SWModule;
 }
 
-namespace Manna {
-	class Module;
+namespace manna {
+	class module;
 
-	class ModuleBible : public Module
+	class bible : public module
 	{
 		Q_OBJECT
 
 		public:
-			explicit ModuleBible(sword::SWModule *, QObject * = 0);
-			ModuleBible(const Module &);
+			explicit bible(sword::SWModule *, QObject * = 0);
+			bible(const module &);
 
 			QJsonArray renderText();
 
