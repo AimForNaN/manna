@@ -40,7 +40,7 @@ unix {
         -lsword \
         -lmanna-server
 
-    debug {
+    CONFIG(debug, debug|release) {
         LIBS += \
             -L"$$PWD/libs/manna-server/build/Debug"
     }
