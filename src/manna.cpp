@@ -13,7 +13,7 @@ manna::manna::manna(int &argc, char **argv)
 
 	Server->Api  = Api;
 	Server->Host = "localhost";
-	Server->Port = 777;
+	Server->Port = 7777;
 
 	Server->run();
 }
