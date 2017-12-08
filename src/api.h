@@ -5,6 +5,7 @@
 #include <manna-api.h>
 
 namespace manna {
+	class connection;
 	class library;
 
 	class api : public QObject, public api_interface
@@ -16,9 +17,9 @@ namespace manna {
 
 			virtual handler getHandler(std::string,std::string);
 
-		public slots:
-
 		protected:
+			void getLicense(connection &);
+			void getModules(connection &);
 
 		private:
 			library * lib;
