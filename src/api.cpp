@@ -73,8 +73,8 @@ void manna::api::getModules(connection & conn) {
 	QJsonArray ret;
 	auto prepMod = [query] (module &mod) -> module {
 		// Getting a module by name? Filters are therefore irrelevant!
-		if (query.hasQueryItem("Get")) {
-			QStringList get = query.allQueryItemValues("Get", QUrl::FullyDecoded);
+		if (query.hasQueryItem("Names")) {
+			QStringList get = query.allQueryItemValues("Names", QUrl::FullyDecoded);
 			if (get.contains(mod.getName())) {
 				return mod;
 			}
