@@ -37,6 +37,14 @@ QString manna::module::getName() {
 	return swmod->getName();
 }
 
+QJsonObject manna::module::getStructure() {
+	if (!strcmp(swmod->getType(), sword::SWMgr::MODTYPE_BIBLES)) {
+		bible mod = *this;
+		return mod.getStructure();
+	}
+	return QJsonObject();
+}
+
 QString manna::module::getType() {
 	return swmod->getType();
 }
@@ -72,6 +80,7 @@ QJsonObject manna::module::toJson() {
 	mod["Language"]    = swmod->getConfigEntry("Lang");
 	mod["Name"]        = swmod->getName();
 	mod["R2L"]         = isRightToLeft();
+	mod["Structure"]   = getStructure();
 	mod["Text"]        = renderText();
 	mod["Version"]     = swmod->getConfigEntry("Version");
 	mod["Type"]        = swmod->getType();

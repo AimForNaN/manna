@@ -19,6 +19,7 @@ namespace manna {
 			explicit bible(sword::SWModule *, QObject * = 0);
 			bible(const module &);
 
+			QJsonObject getStructure();
 			QJsonArray renderText();
 
 		protected:

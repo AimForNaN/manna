@@ -21,6 +21,7 @@ namespace manna {
 
 			static module fromType(sword::SWModule *);
 			QString getName();
+			QJsonObject getStructure();
 			QString getType();
 			bool isNull();
 			bool isRightToLeft();

@@ -15,6 +15,23 @@ manna::bible::bible(sword::SWModule *mod, QObject *parent)
 manna::bible::bible(const module &mod) : module(mod) {
 }
 
+QJsonObject manna::bible::getStructure() {
+	QJsonObject st;
+	sword::VerseKey vk;
+	for (int b = 0; b < 2; b++) {
+		vk.setTestament(b+1);
+		for (int i = 0; i < vk.BMAX[b]; i++) {
+			vk.setBook(i+1);
+			QJsonObject info;
+			info["Chapters"] = vk.getChapterMax();
+			info["Index"] = vk.getBook();
+			info["Testament"] = vk.getTestament();
+			st[vk.getBookName()] = info;
+		}
+	}
+	return st;
+}
+
 QJsonObject manna::bible::prepareVerse(const sword::SWKey *sk) {
 	sword::VerseKey vk(sk);
 	swmod->setKey(sk);
