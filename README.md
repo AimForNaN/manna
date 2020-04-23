@@ -9,6 +9,6 @@ Manna, itself, is licensed under "GNU GPL v2 or later" to meet the requirements 
 
 ## Third-party dependencies
 
-* Qt v5.3 or earlier
-* Mongoose (embedded server)
-* LibSword
+* Qt5
+* nghttp2
+* libsword
