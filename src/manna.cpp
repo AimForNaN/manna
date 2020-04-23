@@ -2,7 +2,7 @@
 
 #include <manna-server.h>
 
-#include "src/api.h"
+#include "api.h"
 
 manna::manna::manna(int &argc, char **argv)
 	: QCoreApplication(argc, argv)
