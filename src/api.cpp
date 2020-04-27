@@ -98,6 +98,8 @@ void manna::api::getModules(connection & conn) {
 			if (query.hasQueryItem("Key")) {
 				QString key = query.queryItemValue("Key", QUrl::FullyDecoded);
 				mod.setKey(key);
+                // Must replace "+" with " " from key!
+                mod.setKey(key.replace("+", " "));
 			}
 			ret.append(mod.toJson());
 		}
