@@ -17,7 +17,7 @@ manna::bible::bible(const module &mod) : module(mod) {
 
 QJsonObject manna::bible::getStructure() {
 	QJsonObject st;
-	sword::VerseKey vk;
+    sword::VerseKey vk(swmod->getKey());
 	for (int b = 0; b < 2; b++) {
 		vk.setTestament(b+1);
 		for (int i = 0; i < vk.BMAX[b]; i++) {
@@ -47,7 +47,7 @@ QJsonObject manna::bible::prepareVerse(const sword::SWKey *sk) {
 
 QJsonArray manna::bible::renderText() {
 	QJsonArray arr;
-	sword::VerseKey vk;
+    sword::VerseKey vk(swmod->getKey());
 	sword::ListKey lk = vk.parseVerseList(key.toUtf8().constData(), 0, true);
 
 	QJsonObject verse;
