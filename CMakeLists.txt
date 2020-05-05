@@ -14,7 +14,7 @@ if(CMAKE_VERSION VERSION_LESS "3.7.0")
     set(CMAKE_INCLUDE_CURRENT_DIR ON)
 endif()
 
-find_package(Qt5 COMPONENTS Core REQUIRED)
+find_package(Qt5 COMPONENTS Core Xml REQUIRED)
 find_package(Sword REQUIRED)
 
 include_directories(
@@ -34,5 +34,6 @@ link_directories(
 )
 
 target_link_libraries(manna Qt5::Core)
+target_link_libraries(manna Qt5::Xml)
 target_link_libraries(manna sword)
 target_link_libraries(manna manna-server)

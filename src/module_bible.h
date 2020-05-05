@@ -3,6 +3,8 @@
 
 #include "module.h"
 
+struct QDomNode;
+
 namespace sword {
 	class SWKey;
 	class SWModule;
@@ -23,6 +25,7 @@ namespace manna {
 			QJsonArray renderText();
 
 		protected:
+            QJsonObject handleNode(const QDomNode &);
 			QJsonObject prepareVerse(const sword::SWKey *);
 	};
 }

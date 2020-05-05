@@ -32,5 +32,5 @@ QList<manna::module> manna::library::getModules() {
 }
 
 void manna::library::loadModules() {
-	lib->Load();
+    lib->load();
 }
