@@ -11,31 +11,37 @@
 #include <QUrl>
 #include <QUrlQuery>
 
-manna::api::api(QString url, QObject * parent)
+manna::api::api(QObject * parent)
 	: QObject(parent)
 	, lib(new library("", this))
-	, url(url)
 {
+    this->handlers.insert(new handler("GET", "/license", [this] (connection &conn) {
+        this->getLicense(conn);
+    }));
+
+    this->handlers.insert(new handler("GET", "/v1/library/refresh", [this] (connection &conn) {
+        lib->loadModules();
+        this->getModules(conn);
+    }));
+
+    this->handlers.insert(new handler("GET", "/v1/modules/unlock", [this] (connection &conn) {
+        this->unlockModules(conn);
+    }));
+
+    this->handlers.insert(new handler("GET", "/v1/modules", [this] (connection &conn) {
+        this->getModules(conn);
+    }));
 }
 
-manna::handler manna::api::getHandler(std::string method, std::string path) {
-	QString url = QString::fromStdString(path);
-	if (method == "GET") {
-		if (url == "/license") {
-			return [this] (connection &conn) {
-				this->getLicense(conn);
-			};
-		}
-		else if (url.startsWith(this->url)) {
-			QString call = url.mid(this->url.length());
-			if (call.startsWith("/modules")) {
-				return [this] (connection &conn) {
-					this->getModules(conn);
-				};
-			}
-		}
+manna::handle manna::api::getHandler(std::string method, std::string path) {
+	QSetIterator<handler*> i(this->handlers);
+	while (i.hasNext()) {
+	    handler *h = i.next();
+	    if (h->matches(method, path)) {
+            return h->operator()(); // Not sure why the shorthand doesn't compile!
+	    }
 	}
-	return NULL;
+	return nullptr;
 }
 
 void manna::api::getLicense(connection &conn) {
@@ -69,19 +75,21 @@ void manna::api::getModules(connection & conn) {
 
 	QUrlQuery query(url);
 
+    QUrl::ComponentFormattingOptions FullyDecoded = QUrl::FullyDecoded;
+
 	QList<module> mods = lib->getModules();
 	QJsonArray ret;
-	auto prepMod = [query] (module &mod) -> module {
+    auto prepMod = [query, FullyDecoded] (module &mod) -> module {
 		// Getting a module by name? Filters are therefore irrelevant!
 		if (query.hasQueryItem("Names")) {
-			QStringList get = query.allQueryItemValues("Names", QUrl::FullyDecoded);
+            QStringList get = query.allQueryItemValues("Names", FullyDecoded);
 			if (get.contains(mod.getName())) {
 				return mod;
 			}
 		}
 		else {
 			if (query.hasQueryItem("Type")) {
-				QString type = query.queryItemValue("Type", QUrl::FullyDecoded);
+                QString type = query.queryItemValue("Type", FullyDecoded);
 				if (type == mod.getType()) {
 					return mod;
 				}
@@ -96,8 +104,7 @@ void manna::api::getModules(connection & conn) {
 		if (!mod.isNull()) {
 			// Set a key to all modules pulled if there is one
 			if (query.hasQueryItem("Key")) {
-				QString key = query.queryItemValue("Key", QUrl::FullyDecoded);
-				mod.setKey(key);
+                QString key = query.queryItemValue("Key", FullyDecoded);
                 // Must replace "+" with " " from key!
                 mod.setKey(key.replace("+", " "));
 			}
@@ -109,4 +116,7 @@ void manna::api::getModules(connection & conn) {
 	rsp.Status = 200;
 	rsp.Body = doc.toJson().toStdString();
 	rsp.flush();
+}
+
+void manna::api::unlockModules(connection &) {
 }

@@ -2,6 +2,7 @@
 #define MANNA_API_H
 
 #include <QObject>
+#include <QSet>
 #include <manna-api.h>
 
 namespace manna {
@@ -13,17 +14,18 @@ namespace manna {
 		Q_OBJECT
 
 		public:
-			api(QString = "/v1", QObject * = 0);
+			api(QObject * = 0);
 
-			virtual handler getHandler(std::string,std::string);
+			virtual handle getHandler(std::string,std::string);
 
 		protected:
 			void getLicense(connection &);
 			void getModules(connection &);
+            void unlockModules(connection &);
 
 		private:
+            QSet<handler *> handlers;
 			library * lib;
-			QString url;
 	};
 }
 

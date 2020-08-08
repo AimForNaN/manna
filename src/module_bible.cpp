@@ -33,40 +33,6 @@ QJsonObject manna::bible::getStructure() {
 	return st;
 }
 
-QJsonObject manna::bible::handleNode(const QDomNode &el) {
-    QJsonObject obj;
-    if (el.isText()) {
-        QString value = el.nodeValue();
-        if (!value.isEmpty()) {
-            obj["Type"] = "text";
-            obj["Text"] = value;
-        }
-    } else if (el.isElement()) {
-        obj["Tag"] = el.nodeName();
-        obj["Type"] = "node";
-
-        if (el.hasAttributes()) {
-            QJsonObject attrs;
-            QDomNamedNodeMap attributes = el.attributes();
-            for (int i = 0; i < attributes.length(); ++i) {
-                QDomNode a = attributes.item(i);
-                attrs[a.nodeName()] = a.nodeValue();
-            }
-            obj["Attributes"] = attrs;
-        }
-
-        if (el.hasChildNodes()) {
-            QJsonArray children;
-            QDomNodeList childNodes = el.childNodes();
-            for (int i = 0; i < childNodes.length(); ++i) {
-                children.append(handleNode(childNodes.at(i)));
-            }
-            obj["Children"] = children;
-        }
-    }
-    return obj;
-}
-
 QJsonObject manna::bible::prepareVerse(const sword::SWKey *sk) {
     sword::VerseKey vk(sk);
 	swmod->setKey(sk);
@@ -79,7 +45,7 @@ QJsonObject manna::bible::prepareVerse(const sword::SWKey *sk) {
 
     QJsonArray verse;
     QString srcType = swmod->getConfigEntry("SourceType");
-    if (srcType.toLower() == "osis") {
+    if (srcType.toLower() == "osis" || srcType.toLower() == "thml") {
         QString text = QString::fromUtf8(swmod->getRawEntry());
         QDomDocument doc;
         doc.setContent("<manna>" + text + "</manna>");
@@ -113,8 +79,7 @@ QJsonArray manna::bible::renderText() {
 		sword::VerseKey vky(k);
 //		sword::VerseKey lower = vky.getLowerBound();
 		sword::VerseKey upper = vky.getUpperBound();
-		while (!upper.equals(vky)) {
-//			qDebug() << k->getRangeText() << k->isBoundSet();
+        while (!upper.equals(vky)) {
 			verse = prepareVerse((sword::SWKey*)&vky);
 			arr.append(verse);
 			vky.increment();

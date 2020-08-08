@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.5)
 
 LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 
-#add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/libs/sword)
+add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/libs/sword)
 add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/libs/manna-server)
 
 set(CMAKE_AUTOMOC ON)
@@ -15,7 +15,7 @@ if(CMAKE_VERSION VERSION_LESS "3.7.0")
 endif()
 
 find_package(Qt5 COMPONENTS Core Xml REQUIRED)
-find_package(Sword REQUIRED)
+#find_package(Sword REQUIRED)
 
 include_directories(
     /usr/local/include/sword

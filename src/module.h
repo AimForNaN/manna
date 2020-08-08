@@ -3,6 +3,8 @@
 
 #include <QObject>
 
+struct QDomNode;
+
 namespace sword {
 	class SWModule;
 }
@@ -13,6 +15,7 @@ namespace manna {
 		Q_OBJECT
 
 		friend class bible;
+        friend class generic_book;
 
 		public:
 			explicit module(sword::SWModule *, QObject * = 0);
@@ -28,6 +31,9 @@ namespace manna {
 			void setKey(const QString &);
 			QJsonObject toJson();
 			QJsonArray renderText();
+
+        protected:
+            QJsonObject handleNode(const QDomNode &);
 
 		private:
 			QString key;
