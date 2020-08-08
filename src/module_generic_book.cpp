@@ -11,7 +11,7 @@
 manna::generic_book::generic_book(sword::SWModule *mod, QObject *parent)
     : module(mod, parent)
 {
-    sword::TreeKey * tk = static_cast<sword::TreeKey *>(swmod->getKey()->clone());
+    auto * tk = dynamic_cast<sword::TreeKey *>(swmod->getKey()->clone());
     tk->firstChild();
     setKey(tk->getText());
 }
@@ -22,7 +22,7 @@ manna::generic_book::generic_book(const module &mod) : module(mod) {
 QJsonObject manna::generic_book::getStructure() {
     QJsonObject st;
 
-    std::function<void(sword::TreeKey*)> getGenBookTOC = [&, st] (sword::TreeKey * tk) {
+    std::function<void(sword::TreeKey*)> getGenBookTOC = [&getGenBookTOC, &st] (sword::TreeKey * tk) {
         if (tk->firstChild()) {
             do {
                 QString text = tk->getText();
@@ -38,13 +38,14 @@ QJsonObject manna::generic_book::getStructure() {
         }
     };
 
-    sword::TreeKey * tk = static_cast<sword::TreeKey *>(swmod->getKey()->clone());
+    auto * tk = dynamic_cast<sword::TreeKey *>(swmod->getKey()->clone());
     getGenBookTOC(tk);
 
     return st;
 }
 
 QJsonObject manna::generic_book::prepareText(const sword::SWKey *sk) {
+    auto * tk = dynamic_cast<sword::TreeKey *>(swmod->getKey());
     swmod->setKey(sk);
     swmod->renderText(); // Prepare text for rendering!
     QJsonObject tinfo;
@@ -72,16 +73,20 @@ QJsonObject manna::generic_book::prepareText(const sword::SWKey *sk) {
     }
     tinfo["Text"] = arr;
 
+    // Important! Reset key so that we don't lose our place!
+    swmod->setKey(tk);
+
     return tinfo;
 }
 
 QJsonArray manna::generic_book::renderText() {
     QJsonArray arr;
-    sword::TreeKey * tk = static_cast<sword::TreeKey *>(swmod->getKey()->clone());
+    auto * tk = dynamic_cast<sword::TreeKey *>(swmod->getKey()->clone());
 
     tk->setText(key.toUtf8().constData());
     QJsonObject text = prepareText((sword::SWKey*)tk);
     arr.append(text);
 
+    delete tk;
     return arr;
 }
