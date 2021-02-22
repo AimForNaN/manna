@@ -19,12 +19,12 @@ manna::api::api(QObject * parent)
         this->getLicense(conn);
     }));
 
-    this->handlers.insert(new handler("GET", "/v1/library/refresh", [this] (connection &conn) {
+    this->handlers.insert(new handler("POST", "/v1/library/refresh", [this] (connection &conn) {
         lib->loadModules();
         this->getModules(conn);
     }));
 
-    this->handlers.insert(new handler("GET", "/v1/modules/unlock", [this] (connection &conn) {
+    this->handlers.insert(new handler("PUT", "/v1/modules/unlock", [this] (connection &conn) {
         this->unlockModules(conn);
     }));
 
