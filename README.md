@@ -1,15 +1,15 @@
 # Manna
 
-Manna is a server application that seeks to serve Biblical scripture and related media via the HTTP protocol.
+Manna is a server application that seeks to serve Biblical scripture and related media via the HTTP/2 protocol.
 The goal is to decouple frontend code from backend code,
 allowing for more rapid frontend development.
 
 In order for the manna server to communicate with modern browsers,
 you must provide the server with a full-chain certificate and a private key.
-This will enable server to be mindful of ALPN negotiations.
+This will enable the server to be mindful of ALPN negotiations.
 
 Self-signed certificates are perfectly fine for personal use.
-You can use the following command to created your own self-signed certificate.
+You can use the following command to create your own self-signed certificate.
 
 ```
 openssl req -x509 -newkey rsa:2048 -nodes -sha256 -keyout server.key -out server.crt
@@ -38,7 +38,7 @@ Arguments:
 
 ## Licensing
 
-Manna, itself, is licensed under "GNU GPL v2 or later" to meet the requirements of dependencies that are licensed under "GNU GPL v2 only" and other compatible licenses.
+Manna, itself, is licensed under "GNU GPL v2 or later" to meet the requirements of its dependencies that are licensed under "GNU GPL v2 only" and other compatible licenses.
 
 ## Third-party dependencies
 
